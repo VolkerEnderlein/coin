@@ -36,7 +36,7 @@ jobs:
           distro: ${{ matrix.distro }}
 
           # Not required, but speeds up builds
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          githubToken: ${{ github.token }}
 
           # Create an artifacts directory
           setup: |
@@ -45,7 +45,7 @@ jobs:
           # Mount the artifacts directory as /artifacts in the container
           dockerRunArgs: |
             --volume "${PWD}/cmake_install_dir:/cmake_install_dir"
-            --volume "${PWD}/cmake_build_dir:/cmake_build_dir"
+          #  --volume "${PWD}/cmake_build_dir:/cmake_build_dir"
           # Pass some environment variables to the container
           env: | # YAML, but pipe character is necessary
             artifact_name: coin-${{ matrix.distro }}_${{ matrix.arch }}
@@ -75,16 +75,17 @@ jobs:
             esac
           # Produce a binary artifact and place it in the mounted volume
           run: |
-            cmake -S . -B /cmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/cmake_install_dir
-            cmake --build /cmake_build_dir --target install --config Release -- -j4
-            echo "Produced artifact at /cmake_install_dir/${artifact_name}"
-      - name: Show the artifact
+            which cmake
+            cmake --version
+            cmake -S . -B cmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/cmake_install_dir
+            cmake --build cmake_build_dir --target install --config Release -- -j4
+      #- name: Show the artifact
+      #  run: |
+      #    ls -al "${PWD}/cmake_install_dir"
+      #    ls -al "${PWD}/cmake_build_dir"
+      - name: Create Artifacts
         # Items placed in /cmake_install_dir in the container will be in
         # ${PWD}/cmake_install_dir on the host.
-        run: |
-          ls -al "${PWD}/cmake_install_dir"
-          ls -al "${PWD}/cmake_build_dir"
-      - name: Create Artifacts
         uses: actions/upload-artifact@v1
         with:
           name: ${{ matrix.distro }}_${{ matrix.arch }}-Artifacts
