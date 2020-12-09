@@ -62,15 +62,15 @@ jobs:
             case "${{ matrix.distro }}" in
               ubuntu*|jessie|stretch|buster)
                 apt-get update -y
-                apt-get install -y cmake git freeglut3-dev libboost-dev
+                apt-get install -y build-essential cmake git freeglut3-dev libboost-dev
                 ;;
               #fedora*)
               #  dnf -y update
-              #  dnf -y install cmake git freeglut3-dev libboost-dev
+              #  dnf -y install build-essential cmake git freeglut3-dev libboost-dev
               #  ;;
               #alpine*)
               #  apk update
-              #  apk add cmake git freeglut3-dev libboost-dev
+              #  apk add build-essential cmake git freeglut3-dev libboost-dev
               #  ;;
             esac
           # Produce a binary artifact and place it in the mounted volume
