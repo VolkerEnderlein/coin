@@ -26,6 +26,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
       - uses: uraimo/run-on-arch-action@v2.0.7
         name: Build artifact
         id: build
@@ -38,13 +40,15 @@ jobs:
 
           # Create an artifacts directory
           setup: |
-            mkdir -p "${PWD}/artifacts"
+            mkdir -p "${PWD}/cmake_install_dir"
+            mkdir -p "${PWD}/cmake_build_dir"
           # Mount the artifacts directory as /artifacts in the container
           dockerRunArgs: |
-            --volume "${PWD}/artifacts:/artifacts"
+            --volume "${PWD}/cmake_install_dir:/cmake_install_dir"
+            --volume "${PWD}/cmake_build_dir:/cmake_build_dir"
           # Pass some environment variables to the container
           env: | # YAML, but pipe character is necessary
-            artifact_name: git-${{ matrix.distro }}_${{ matrix.arch }}
+            artifact_name: coin-${{ matrix.distro }}_${{ matrix.arch }}
           # The shell to run commands with in the container
           shell: /bin/sh
 
@@ -58,11 +62,11 @@ jobs:
             case "${{ matrix.distro }}" in
               ubuntu*|jessie|stretch|buster)
                 apt-get update -q -y
-                apt-get install -q -y git freeglut3-dev libboost-dev
+                apt-get install -q -y freeglut3-dev libboost-dev
                 ;;
               #fedora*)
               #  dnf -y update
-              #  dnf -y install git freeglut3-dev libboost-dev
+              #  dnf -y install freeglut3-dev libboost-dev
               #  ;;
               #alpine*)
               #  apk update
@@ -71,13 +75,21 @@ jobs:
             esac
           # Produce a binary artifact and place it in the mounted volume
           run: |
-            cp $(which git) "/artifacts/${artifact_name}"
-            echo "Produced artifact at /artifacts/${artifact_name}"
+            cmake -S . -B /cmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/cmake_install_dir
+            cmake --build /cmake_build_dir --target install --config Release -- -j4
+            echo "Produced artifact at /cmake_install_dir/${artifact_name}"
       - name: Show the artifact
-        # Items placed in /artifacts in the container will be in
-        # ${PWD}/artifacts on the host.
+        # Items placed in /cmake_install_dir in the container will be in
+        # ${PWD}/cmake_install_dir on the host.
         run: |
-          ls -al "${PWD}/artifacts"
+          ls -al "${PWD}/cmake_install_dir"
+          ls -al "${PWD}/cmake_build_dir"
+      - name: Create Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.distro }}_${{ matrix.arch }}-Artifacts
+          path: ${PWD}/cmake_install_dir/
+        if: always()
 
 #  ubuntu-build:
 #    name: Ubuntu Build
