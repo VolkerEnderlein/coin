@@ -8,157 +8,72 @@ on:
   #  branches: [ master ]
 
 jobs:
-  aarch64-build:
-    # The host should always be linux
-    runs-on: ubuntu-18.04
-    name: Build on ${{ matrix.distro }} ${{ matrix.arch }}
-
-    # Run steps on a matrix of 3 arch/distro combinations
-    strategy:
-      matrix:
-        include:
-          - arch: aarch64
-            distro: ubuntu18.04
-          #- arch: ppc64le
-          #  distro: alpine_latest
-          #- arch: s390x
-          #  distro: fedora_latest
-
+  ubuntu-build:
+    name: Ubuntu Build
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Checkout submodules
         run: git submodule update --init --recursive
-      - uses: uraimo/run-on-arch-action@v2.0.7
-        name: Build artifact
-        id: build
-        with:
-          arch: ${{ matrix.arch }}
-          distro: ${{ matrix.distro }}
-
-          # Not required, but speeds up builds
-          githubToken: ${{ github.token }}
-
-          # Create an artifacts directory
-          setup: |
-            mkdir -p "${PWD}/cmake_install_dir"
-            mkdir -p "${PWD}/cmake_build_dir"
-          # Mount the artifacts directory as /artifacts in the container
-          dockerRunArgs: |
-            --volume "${PWD}/cmake_install_dir:/cmake_install_dir"
-          #  --volume "${PWD}/cmake_build_dir:/cmake_build_dir"
-          # Pass some environment variables to the container
-          env: | # YAML, but pipe character is necessary
-            artifact_name: coin-${{ matrix.distro }}_${{ matrix.arch }}
-          # The shell to run commands with in the container
-          shell: /bin/sh
-
-          # Install some dependencies in the container. This speeds up builds if
-          # you are also using githubToken. Any dependencies installed here will
-          # be part of the container image that gets cached, so subsequent
-          # builds don't have to re-install them. The image layer is cached
-          # publicly in your project's package repository, so it is vital that
-          # no secrets are present in the container state or logs.
-          install: |
-            case "${{ matrix.distro }}" in
-              ubuntu*|jessie|stretch|buster)
-                apt-get update -y
-                apt-get install -y build-essential cmake git freeglut3-dev libboost-dev
-                ;;
-              #fedora*)
-              #  dnf -y update
-              #  dnf -y install build-essential cmake git freeglut3-dev libboost-dev
-              #  ;;
-              #alpine*)
-              #  apk update
-              #  apk add build-essential cmake git freeglut3-dev libboost-dev
-              #  ;;
-            esac
-          # Produce a binary artifact and place it in the mounted volume
-          run: |
-            which cmake
-            cmake --version
-            cmake -H. -Bcmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/cmake_install_dir
-            cmake --build cmake_build_dir --target install --config Release -- -j4
-            ls -al cmake_build_dir
-      #- name: Show the artifact
-      #  run: |
-      #    ls -al "${PWD}/cmake_install_dir"
-      #    ls -al "${PWD}/cmake_build_dir"
+      - name: Create build directory and run CMake
+        run: |
+          sudo apt-get -y update
+          sudo apt-get -y install freeglut3-dev libboost-dev
+          cmake -S . -B cmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir
+      - name: Build project
+        run: cmake --build cmake_build_dir --target install --config Release -- -j4
+      - name: Run tests
+        run:  ctest -C Release -VV
+        working-directory: cmake_build_dir
       - name: Create Artifacts
-        # Items placed in /cmake_install_dir in the container will be in
-        # ${PWD}/cmake_install_dir on the host.
         uses: actions/upload-artifact@v1
         with:
-          name: ${{ matrix.distro }}_${{ matrix.arch }}-Artifacts
+          name: Ubuntu-Artifacts
           path: cmake_install_dir/
         if: always()
 
-#  ubuntu-build:
-#    name: Ubuntu Build
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Checkout submodules
-#        run: git submodule update --init --recursive
-#      - name: Create build directory and run CMake
-#        run: |
-#          sudo apt-get -y update
-#          sudo apt-get -y install freeglut3-dev libboost-dev
-#          cmake -S . -B cmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir
-#      - name: Build project
-#        run: cmake --build cmake_build_dir --target install --config Release -- -j4
-#      - name: Run tests
-#        run:  ctest -C Release -VV
-#        working-directory: cmake_build_dir
-#      - name: Create Artifacts
-#        uses: actions/upload-artifact@v1
-#        with:
-#          name: Ubuntu-Artifacts
-#          path: cmake_install_dir/
-#        if: always()
+  windows-build:
+    name: Windows Build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+      - name: Create build directory and run CMake
+        shell: cmd
+        run: cmake -S . -B cmake_build_dir -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir -DBOOST_ROOT=%BOOST_ROOT_1_72_0%
+      - name: Build project
+        run: cmake --build cmake_build_dir --target INSTALL --config Release -- /nologo /verbosity:minimal /maxcpucount:2 /property:MultiProcessorCompilation=true
+      - name: Run tests
+        run:  ctest -C Release -VV
+        working-directory: cmake_build_dir
+      - name: Create Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: Windows-Artifacts
+          path: cmake_install_dir/
+        if: always()
 
-#  windows-build:
-#    name: Windows Build
-#    runs-on: windows-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Checkout submodules
-#        run: git submodule update --init --recursive
-#      - name: Create build directory and run CMake
-#        shell: cmd
-#        run: cmake -S . -B cmake_build_dir -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir -DBOOST_ROOT=%BOOST_ROOT_1_72_0%
-#      - name: Build project
-#        run: cmake --build cmake_build_dir --target INSTALL --config Release -- /nologo /verbosity:minimal /maxcpucount:2 /property:MultiProcessorCompilation=true
-#      - name: Run tests
-#        run:  ctest -C Release -VV
-#        working-directory: cmake_build_dir
-#      - name: Create Artifacts
-#        uses: actions/upload-artifact@v1
-#        with:
-#          name: Windows-Artifacts
-#          path: cmake_install_dir/
-#        if: always()
-
-#  macos-build:
-#    name: MacOS Build
-#    runs-on: macos-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Checkout submodules
-#        run: git submodule update --init --recursive
-#      - name: Create build directory and run CMake
-#        run: |
-#          brew install boost
-#          cmake -S . -B cmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir
-#      - name: Build project
-#        run: cmake --build cmake_build_dir --target install --config Release -- -j4
-#      - name: Run tests
-#        run:  ctest -C Release -VV
-#        working-directory: cmake_build_dir
-#      - name: Create Artifacts
-#        uses: actions/upload-artifact@v1
-#        with:
-#          name: MacOS-Artifacts
-#          path: cmake_install_dir/
-#        if: always()
+  macos-build:
+    name: MacOS Build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+      - name: Create build directory and run CMake
+        run: |
+          brew install boost
+          cmake -S . -B cmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir
+      - name: Build project
+        run: cmake --build cmake_build_dir --target install --config Release -- -j4
+      - name: Run tests
+        run:  ctest -C Release -VV
+        working-directory: cmake_build_dir
+      - name: Create Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: MacOS-Artifacts
+          path: cmake_install_dir/
+        if: always()
         
