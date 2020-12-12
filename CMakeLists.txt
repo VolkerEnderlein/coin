@@ -594,6 +594,8 @@ elseif(APPLE)
   endif()
 endif()
 
+message(STATUS "cmakeRL before: ${CMAKE_REQUIRED_LIBRARIES}")
+message(STATUS "coinTLL: ${COIN_TARGET_LINK_LIBRARIES}")
 if(NOT (HAVE_WGL OR HAVE_AGL OR HAVE_CGL OR HAVE_GLX))
   if (NOT TARGET OpenGL::GLX)
     if (OPENGL_glx_LIBRARY)
@@ -609,6 +611,7 @@ if(NOT (HAVE_WGL OR HAVE_AGL OR HAVE_CGL OR HAVE_GLX))
     int main() { (void)glXChooseVisual(0L, 0, 0L); glEnd(); return 0; }
   " HAVE_GLX)
 endif()
+message(STATUS "cmakeRL after: ${CMAKE_REQUIRED_LIBRARIES}")
 
 # Checks specific OpenGL configurations
 if(HAVE_WINDOWS_H)
