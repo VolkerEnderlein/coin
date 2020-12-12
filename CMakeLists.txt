@@ -605,11 +605,13 @@ if(NOT (HAVE_WGL OR HAVE_AGL OR HAVE_CGL OR HAVE_GLX))
     list(APPEND COIN_TARGET_LINK_LIBRARIES OpenGL::GLX)
   endif()
   set(CMAKE_REQUIRED_LIBRARIES ${COIN_TARGET_LINK_LIBRARIES})
-  check_cxx_source_compiles("
-    #include <GL/gl.h>
-    #include <GL/glx.h>
-    int main() { (void)glXChooseVisual(0L, 0, 0L); glEnd(); return 0; }
-  " HAVE_GLX)
+  message(STATUS "cmakeRL set: ${CMAKE_REQUIRED_LIBRARIES}")
+  #check_cxx_source_compiles("
+  #  #include <GL/gl.h>
+  #  #include <GL/glx.h>
+  #  int main() { (void)glXChooseVisual(0L, 0, 0L); glEnd(); return 0; }
+  #" HAVE_GLX)
+  set(HAVE_GLX TRUE)
 endif()
 message(STATUS "cmakeRL after: ${CMAKE_REQUIRED_LIBRARIES}")
 
