@@ -44,7 +44,7 @@
 #include <cmath>
 #include <cfloat>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <boost/intrusive_ptr.hpp>
 
 #include <Inventor/SbViewVolume.h>
@@ -90,7 +90,7 @@ public:
 
   SbVec2f downposn;
   boost::intrusive_ptr<SoCamera> cameraclone;
-  boost::scoped_ptr<SbSphereSheetProjector> projector;
+  std::unique_ptr<SbSphereSheetProjector> projector;
 
   struct log {
     SbVec2f posn;

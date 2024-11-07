@@ -42,7 +42,7 @@
 #include <cstring>
 #include <map>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <boost/scoped_array.hpp>
 #include <boost/intrusive_ptr.hpp>
 
@@ -82,21 +82,16 @@ using std::strlen;
 
 class ScXMLDocument::PImpl {
 public:
-  PImpl(void)
-  : filename(NULL),
-    root(NULL),
-    stateidmap(NULL),
-    dataidmap(NULL)
-  { }
+  PImpl(void) : filename(NULL) { }
   ~PImpl(void) { }
 
   boost::scoped_array<char> filename;
-  boost::scoped_ptr<ScXMLScxmlElt> root;
+  std::unique_ptr<ScXMLScxmlElt> root;
 
   typedef std::map<const char *, ScXMLAbstractStateElt *> StateIdMap;
   typedef std::map<const char *, ScXMLDataElt *> DataIdMap;
-  boost::scoped_ptr<StateIdMap> stateidmap;
-  boost::scoped_ptr<DataIdMap> dataidmap;
+  std::unique_ptr<StateIdMap> stateidmap;
+  std::unique_ptr<DataIdMap> dataidmap;
 
   void fillIdentifierMaps(ScXMLElt * object);
 
