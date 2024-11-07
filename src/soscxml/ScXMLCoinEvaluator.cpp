@@ -47,7 +47,6 @@
 #include <cstring>
 #include <map>
 
-#include <boost/scoped_array.hpp>
 #include <memory>
 
 #include <Inventor/SoDB.h>

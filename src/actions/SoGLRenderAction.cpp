@@ -68,7 +68,6 @@
 #include <cstring>
 
 #include <memory>
-#include <boost/scoped_array.hpp>
 
 #include <Inventor/C/glue/gl.h>
 #include <Inventor/C/tidbits.h>
@@ -580,7 +579,7 @@ public:
 
   GLuint depthtextureid;
   GLuint hilotextureid;
-  boost::scoped_array<GLuint> rgbatextureids;
+  std::unique_ptr<GLuint[]> rgbatextureids;
   GLuint sortedlayersblendprogramid;
   unsigned short viewportheight;
   unsigned short viewportwidth;

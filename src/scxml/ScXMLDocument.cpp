@@ -43,7 +43,6 @@
 #include <map>
 
 #include <memory>
-#include <boost/scoped_array.hpp>
 #include <boost/intrusive_ptr.hpp>
 
 #include <Inventor/C/XML/document.h>
@@ -85,7 +84,7 @@ public:
   PImpl(void) : filename(NULL) { }
   ~PImpl(void) { }
 
-  boost::scoped_array<char> filename;
+  std::unique_ptr<char[]> filename;
   std::unique_ptr<ScXMLScxmlElt> root;
 
   typedef std::map<const char *, ScXMLAbstractStateElt *> StateIdMap;
