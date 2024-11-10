@@ -44,11 +44,9 @@
 #include <Inventor/C/base/list.h>
 
 #include "fontlib_wrapper.h"
-#include "coindefs.h"
+//#include "coindefs.h"
 
-#ifndef COIN_WORKAROUND_NO_USING_STD_FUNCS
 using namespace std;
-#endif // !COIN_WORKAROUND_NO_USING_STD_FUNCS
 
 /* ********************************************************************** */
 

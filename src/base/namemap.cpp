@@ -38,15 +38,13 @@
 
 #include "threads/threadsutilp.h"
 #include "tidbitsp.h"
-#include "coindefs.h"
+//#include "coindefs.h"
 
-#ifndef COIN_WORKAROUND_NO_USING_STD_FUNCS
 using std::malloc;
 using std::free;
 using std::strcpy;
 using std::strlen;
 using std::strcmp;
-#endif // !COIN_WORKAROUND_NO_USING_STD_FUNCS
 
 /* ************************************************************************* */
 

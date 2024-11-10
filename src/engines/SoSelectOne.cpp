@@ -77,11 +77,9 @@
 
 #include "engines/SoSubEngineP.h"
 #include "SbBasicP.h"
-#include "coindefs.h"
+//#include "coindefs.h"
 
-#ifndef COIN_WORKAROUND_NO_USING_STD_FUNCS
 using std::strstr;
-#endif // !COIN_WORKAROUND_NO_USING_STD_FUNCS
 
 /*!
   \var SoMField * SoSelectOne::input

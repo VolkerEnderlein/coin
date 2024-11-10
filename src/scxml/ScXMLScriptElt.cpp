@@ -46,12 +46,10 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/C/XML/element.h>
 
-#include "coindefs.h"
+//#include "coindefs.h"
 #include "SbBasicP.h"
 
-#ifndef COIN_WORKAROUND_NO_USING_STD_FUNCS
 using std::strcmp;
-#endif // !COIN_WORKAROUND_NO_USING_STD_FUNCS
 
 // *************************************************************************
 

@@ -149,11 +149,9 @@
 #include "tidbitsp.h"
 #include "misc/SbHash.h"
 
-#include "coindefs.h"
+//#include "coindefs.h"
 
-#ifndef COIN_WORKAROUND_NO_USING_STD_FUNCS
 using std::toupper;
-#endif // !COIN_WORKAROUND_NO_USING_STD_FUNCS
 
 #include "cppmangle.icc"
 

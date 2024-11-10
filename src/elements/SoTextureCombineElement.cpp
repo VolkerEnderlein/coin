@@ -53,12 +53,10 @@
 #include <Inventor/C/glue/gl.h>
 #include <Inventor/system/gl.h>
 
-#include "coindefs.h"
+//#include "coindefs.h"
 #include "SbBasicP.h"
 
-#ifndef COIN_WORKAROUND_NO_USING_STD_FUNCS
 using std::memcpy;
-#endif // !COIN_WORKAROUND_NO_USING_STD_FUNCS
 
 class SoTextureCombineElementP {
 public:

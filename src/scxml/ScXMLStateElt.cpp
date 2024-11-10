@@ -66,11 +66,9 @@
 
 #include "scxml/ScXMLCommonP.h"
 
-#ifndef COIN_WORKAROUND_NO_USING_STD_FUNCS
 using std::strcmp;
 using std::strcpy;
 using std::strlen;
-#endif // !COIN_WORKAROUND_NO_USING_STD_FUNCS
 
 // *************************************************************************
 

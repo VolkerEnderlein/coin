@@ -43,11 +43,9 @@
 #include "tidbitsp.h"
 #include "fonts/glyph2d.h"
 #include "fonts/glyph.h"
-#include "coindefs.h"
+//#include "coindefs.h"
 
-#ifndef COIN_WORKAROUND_NO_USING_STD_FUNCS
 using namespace std;
-#endif // !COIN_WORKAROUND_NO_USING_STD_FUNCS
 
 static SbBool glyph2d_specmatch(const cc_font_specification * spec1, const cc_font_specification * spec2);
 
