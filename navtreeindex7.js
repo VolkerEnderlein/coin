@@ -1,5 +1,6 @@
 var NAVTREEINDEX7 =
 {
+"classSbSphereProjector.html#a729fa28d6220350e6352491dcfd74e73":[3,16,8,6],
 "classSbSphereProjector.html#a868f57ebec32957883b1321b0adf955b":[3,16,8,0],
 "classSbSphereProjector.html#a9c4d57571349f6233e78e351b949a7b9":[3,16,8,2],
 "classSbSphereProjector.html#ab08294fd4cac38679167e552e4940ab0":[3,16,8,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX7 =
 "classSbVec2i32.html":[3,1,38],
 "classSbVec2i32.html#a0371eb39aaf87ea431621c900914a8e2":[3,1,38,17],
 "classSbVec2i32.html#a0bd56ee80b0e8f6aefef304b6e7ba11e":[3,1,38,9],
-"classSbVec2i32.html#a1711661c6358b10a93ecbcde9382d960":[3,1,38,30],
-"classSbVec2i32.html#a17b0be4cc751a41ff8423359ed754c03":[3,1,38,36]
+"classSbVec2i32.html#a1711661c6358b10a93ecbcde9382d960":[3,1,38,30]
 };

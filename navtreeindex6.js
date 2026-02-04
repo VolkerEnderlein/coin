@@ -1,5 +1,6 @@
 var NAVTREEINDEX6 =
 {
+"classSbList.html#ad92621e814796448b9fe0990bdb959ab":[3,1,24,8],
 "classSbList.html#ada8fe73c9935bd004fc2b9c07bc68638":[3,1,24,12],
 "classSbList.html#ae7c20239e83b64aec15b53273622618d":[3,1,24,2],
 "classSbList.html#ae98b0264bc9a47902cb36386dde1341c":[3,1,24,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX6 =
 "classSbSphereProjector.html#a136681b3e872e38473160fe0fde0352d":[3,16,8,15],
 "classSbSphereProjector.html#a23eb381f2626c24f4c2fa378e89412b4":[3,16,8,14],
 "classSbSphereProjector.html#a378cd6b9ec089b03a78251e433d57758":[3,16,8,1],
-"classSbSphereProjector.html#a6220a37e4af7bda760c62d2e26599c17":[3,16,8,3],
-"classSbSphereProjector.html#a729fa28d6220350e6352491dcfd74e73":[3,16,8,6]
+"classSbSphereProjector.html#a6220a37e4af7bda760c62d2e26599c17":[3,16,8,3]
 };
