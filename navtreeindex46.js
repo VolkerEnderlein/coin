@@ -1,5 +1,8 @@
 var NAVTREEINDEX46 =
 {
+"functions_vars.html":[5,3,2],
+"functions_vars.html":[5,3,2,0],
+"functions_vars_b.html":[5,3,2,1],
 "functions_vars_c.html":[5,3,2,2],
 "functions_vars_d.html":[5,3,2,3],
 "functions_vars_e.html":[5,3,2,4],
@@ -29,7 +32,8 @@ var NAVTREEINDEX46 =
 "functions_y.html":[5,3,0,24],
 "functions_z.html":[5,3,0,25],
 "functions_~.html":[5,3,0,26],
-"gl_8h_source.html":[6,0,1,0,23,0],
+"gl-fallbacks_8h_source.html":[6,0,1,0,23,0],
+"gl_8h_source.html":[6,0,1,0,23,1],
 "group__coin__VRMLnodes.html":[3,23],
 "group__coin__XML.html":[3,25],
 "group__coin__XML.html#ga2c3f2733691b7d1e60765c4c691433ee":[3,25,0],
